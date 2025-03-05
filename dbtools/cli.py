@@ -1,6 +1,6 @@
 import argparse
 import sys
-from utils import (
+from dbtools.commands import (
     auto_export_compare_table,
     compare_db,
     compare_selected_table,
