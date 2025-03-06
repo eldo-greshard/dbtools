@@ -106,10 +106,10 @@ def run():
         print("\nUsage: dbtools auto_export_compare_table <pg_service> <db1> <db2> <output_dir>")
         sys.exit(1)
 
-    pg_service = sys.argv[2]
-    db1 = sys.argv[3]
-    db2 = sys.argv[4]
-    output_dir = sys.argv[5]
+    pg_service = sys.argv[3]
+    db1 = sys.argv[5]
+    db2 = sys.argv[7]
+    output_dir = sys.argv[9]
 
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
