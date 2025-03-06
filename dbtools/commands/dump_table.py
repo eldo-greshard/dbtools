@@ -60,7 +60,7 @@ def dump_table(reference_db, csv_dir, output_dir):
                 id_list = ", ".join(map(str, ids))
                 dump_file.write(f"-- Dump data for table: {table}\n")
                 dump_file.write(
-                    f"COPY (SELECT * FROM {table} WHERE id IN ({id_list})) TO 'missing_{table}.csv' CSV HEADER;\n\n"
+                    f"\COPY (SELECT * FROM {table} WHERE id IN ({id_list})) TO 'missing_{table}.csv' CSV HEADER;\n\n"
                 )
 
         print(f"✅ Dump script generated: {output_dump_file}")
