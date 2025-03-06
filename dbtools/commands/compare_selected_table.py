@@ -59,15 +59,15 @@ def compare_selected_tables(pg_service, db1, db2, selected_tables):
         data_db2 = get_table_data(cur2, table)
 
         missing_in_db2 = data_db1 - data_db2
-        missing_in_db1 = data_db2 - data_db1
+        # missing_in_db1 = data_db2 - data_db1
 
         differences = []
 
         for row in missing_in_db2:
             differences.append({"id": row[0], "database_name": db2, "table_name": table, "note": "Missing in db2"})
 
-        for row in missing_in_db1:
-            differences.append({"id": row[0], "database_name": db1, "table_name": table, "note": "Missing in db1"})
+        # for row in missing_in_db1:
+        #     differences.append({"id": row[0], "database_name": db1, "table_name": table, "note": "Missing in db1"})
 
         # Save differences to a CSV file specific to the table
         output_file = f"{table}_differences.csv"
