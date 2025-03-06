@@ -11,7 +11,7 @@ def run_psql_command(pgservice, database, command):
     except subprocess.CalledProcessError as e:
         print(f"❌ Error executing command: {command}\n{e.stderr}")
 
-def import_missing_data_from_directory(pgservice, database, csv_dir):
+def bulk_import(pgservice, database, csv_dir):
     """Imports missing data from all CSV files in a directory into PostgreSQL."""
     
     # Ensure the directory exists
@@ -59,4 +59,4 @@ def run():
     database = sys.argv[3]
     csv_dir = sys.argv[4]
 
-    import_missing_data_from_directory(pg_service, database, csv_dir)
+    bulk_import(pg_service, database, csv_dir)

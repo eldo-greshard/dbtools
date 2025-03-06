@@ -2,10 +2,11 @@ import argparse
 import sys
 from dbtools.commands import (
     auto_export_compare_table,
+    bulk_import,
     compare_db,
     compare_selected_table,
     dump_table,
-    import_missing_data
+    single_table_import
 )
 
 def main():
@@ -38,14 +39,21 @@ def main():
     parser_dump_table.add_argument("--csv_file", required=True, help="CSV File")
     parser_dump_table.add_argument("--output_dump_file", required=True, help="Output Dump File")
 
-    # Command: import_missing_data
-    parser_import_missing_data = subparsers.add_parser("import_missing_data", help="Import missing data into a database.")
-    parser_import_missing_data.add_argument("--pg_service", required=True, help="Postgresql Service Name")
-    parser_import_missing_data.add_argument("--database", required=True, help="Database to be imported data")
-    parser_import_missing_data.add_argument("--csv_file", required=True, help="the csv_file contains dump table data")
-    parser_import_missing_data.add_argument("--temp_table", required=True, help="Temporary table name")
-    parser_import_missing_data.add_argument("--target_table", required=True, help="Target table name")
-
+    # Command: bulk_import
+    parser_bulk_import = subparsers.add_parser("bulk_import", help="Bulk import missing data into a database.")
+    parser_bulk_import.add_argument("--pg_service", required=True, help="Postgresql Service Name")
+    parser_bulk_import.add_argument("--database", required=True, help="Database to be imported data")
+    parser_bulk_import.add_argument("--csv_dir", required=True, help="the directory csv_file contains dump table data")
+    
+    # Command: single_table_import
+    parser_single_table_import = subparsers.add_parser("single_table_import", help="Import single table missing data into a database.")
+    parser_single_table_import.add_argument("--pg_service", required=True, help="Postgresql Service Name")
+    parser_single_table_import.add_argument("--database", required=True, help="Database to be imported data")
+    parser_single_table_import.add_argument("--csv_file", required=True, help="the csv_file contains dump table data")
+    parser_single_table_import.add_argument("--temp_table", required=True, help="Temporary table name")
+    parser_single_table_import.add_argument("--target_table", required=True, help="Target table name")
+    
+    
     args = parser.parse_args()
 
     if args.command == "auto_export_compare_table":
@@ -56,8 +64,10 @@ def main():
         compare_selected_table.run()
     elif args.command == "dump_table":
         dump_table.run()
-    elif args.command == "import_missing_data":
-        import_missing_data.run()
+    elif args.command == "bulk_import":
+        bulk_import.run()
+    elif args.command == "single_table_import":
+        single_table_import.run()
     else:
         parser.print_help()
         sys.exit(1)
