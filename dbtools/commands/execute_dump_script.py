@@ -44,8 +44,8 @@ def run():
         print("\nUsage: dbtools execute_dump_scripts <pg_service> <database> <scripts_directory>")
         sys.exit(1)
 
-    pg_service = sys.argv[2]
-    database = sys.argv[3]
-    scripts_dir = sys.argv[4]
+    pg_service = sys.argv[3]
+    database = sys.argv[5]
+    scripts_dir = sys.argv[7]
 
     execute_dump_scripts(pg_service, database, scripts_dir)
