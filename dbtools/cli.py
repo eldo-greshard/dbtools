@@ -14,11 +14,11 @@ def main():
     subparsers = parser.add_subparsers(dest="command", help="Available commands",required=True)
 
     # Command: auto_export_compare_table
-    subparsers.add_parser("auto_export_compare_table", help="Automatically compare all tables and export results.")
-    parser_compare_db.add_argument("--pg_service", required=True, help="PostgreSQL service name")
-    parser_compare_db.add_argument("--db1", required=True, help="First database name")
-    parser_compare_db.add_argument("--db2", required=True, help="Second database name")
-    parser_compare_db.add_argument("--output_directory", required=True, help="Output directory")
+    parser_auto_export_compare_table = subparsers.add_parser("auto_export_compare_table", help="Automatically compare all tables and export results.")
+    parser_auto_export_compare_table.add_argument("--pg_service", required=True, help="PostgreSQL service name")
+    parser_auto_export_compare_table.add_argument("--db1", required=True, help="First database name")
+    parser_auto_export_compare_table.add_argument("--db2", required=True, help="Second database name")
+    parser_auto_export_compare_table.add_argument("--output_directory", required=True, help="Output directory")
 
     # Command: compare_db
     parser_compare_db  = subparsers.add_parser("compare_db", help="Compare entire databases.")
