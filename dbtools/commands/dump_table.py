@@ -15,12 +15,12 @@ def dump_table(reference_db, csv_dir, output_dir):
 
     # Process each CSV file in the given directory
     for csv_file in os.listdir(csv_dir):
-        
+
         if not csv_file.endswith(".csv"):
             continue  # Skip non-CSV files
         
         csv_path = os.path.join(csv_dir, csv_file)
-        output_dump_file = os.path.join(output_dir, f"{os.path.splitext(csv_file)[0]}.sql")
+        output_dump_file = os.path.join(output_dir, f"{os.path.splitext(csv_file)[0]}.csv")
 
         print(f"🔄 Processing: {csv_file} → {output_dump_file}")
 

@@ -85,7 +85,7 @@ def compare_all_tables(db1, db2, common_tables, output_dir, pg_service):
             os.makedirs(output_dir, exist_ok=True)
 
         # Save differences to a CSV file specific to the table inside the user-defined directory
-        output_file = os.path.join(output_dir, f"{table}_differences.csv")
+        output_file = os.path.join(output_dir, f"{table}.csv")
         if differences:
             with open(output_file, mode="w", newline="") as file:
                 writer = csv.DictWriter(file, fieldnames=["id", "database_name", "table_name", "note"])

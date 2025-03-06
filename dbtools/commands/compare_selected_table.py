@@ -70,7 +70,7 @@ def compare_selected_tables(pg_service, db1, db2, selected_tables):
         #     differences.append({"id": row[0], "database_name": db1, "table_name": table, "note": "Missing in db1"})
 
         # Save differences to a CSV file specific to the table
-        output_file = f"{table}_differences.csv"
+        output_file = f"{table}.csv"
         if differences:
             with open(output_file, mode="w", newline="") as file:
                 writer = csv.DictWriter(file, fieldnames=["id", "database_name", "table_name", "note"])
