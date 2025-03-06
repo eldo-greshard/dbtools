@@ -71,15 +71,18 @@ def compare_all_tables(db1, db2, common_tables, output_dir, pg_service):
         data_db2 = get_table_data(cur2, table)
 
         missing_in_db2 = data_db1 - data_db2
-        missing_in_db1 = data_db2 - data_db1
+        # missing_in_db1 = data_db2 - data_db1
 
         differences = []
 
         for row in missing_in_db2:
             differences.append({"id": row[0], "database_name": db2, "table_name": table, "note": "Missing in db2"})
 
-        for row in missing_in_db1:
-            differences.append({"id": row[0], "database_name": db1, "table_name": table, "note": "Missing in db1"})
+        # for row in missing_in_db1:
+        #     differences.append({"id": row[0], "database_name": db1, "table_name": table, "note": "Missing in db1"})
+
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir, exist_ok=True)
 
         # Save differences to a CSV file specific to the table inside the user-defined directory
         output_file = os.path.join(output_dir, f"{table}_differences.csv")

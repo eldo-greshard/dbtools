@@ -15,6 +15,10 @@ def main():
 
     # Command: auto_export_compare_table
     subparsers.add_parser("auto_export_compare_table", help="Automatically compare all tables and export results.")
+    parser_compare_db.add_argument("--pg_service", required=True, help="PostgreSQL service name")
+    parser_compare_db.add_argument("--db1", required=True, help="First database name")
+    parser_compare_db.add_argument("--db2", required=True, help="Second database name")
+    parser_compare_db.add_argument("--output_directory", required=True, help="Output directory")
 
     # Command: compare_db
     parser_compare_db  = subparsers.add_parser("compare_db", help="Compare entire databases.")
@@ -35,7 +39,12 @@ def main():
     parser_dump_table.add_argument("--output_dump_file", required=True, help="Output Dump File")
 
     # Command: import_missing_data
-    subparsers.add_parser("import_missing_data", help="Import missing data into a database.")
+    parser_import_missing_data = subparsers.add_parser("import_missing_data", help="Import missing data into a database.")
+    parser_import_missing_data.add_argument("--pg_service", required=True, help="Postgresql Service Name")
+    parser_import_missing_data.add_argument("--database", required=True, help="Database to be imported data")
+    parser_import_missing_data.add_argument("--csv_file", required=True, help="the csv_file contains dump table data")
+    parser_import_missing_data.add_argument("--temp_table", required=True, help="Temporary table name")
+    parser_import_missing_data.add_argument("--target_table", required=True, help="Target table name")
 
     args = parser.parse_args()
 

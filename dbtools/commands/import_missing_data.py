@@ -1,4 +1,5 @@
 import subprocess
+import sys
 
 def run_psql_command(pgservice, database, command):
     """Runs a PostgreSQL command using subprocess."""
@@ -27,3 +28,12 @@ def import_missing_data(pgservice, database, csv_file, temp_table, target_table)
     """)
 
     print("✅ Import process completed successfully!")
+
+def run():
+    pg_service = sys.argv[3]
+    database = sys.argv[5]
+    csv_file = sys.argv[7]
+    temp_table = sys.argv[9]
+    target_table = sys.argv[10]
+
+    import_missing_data(pg_service, database, csv_file, temp_table, target_table)
