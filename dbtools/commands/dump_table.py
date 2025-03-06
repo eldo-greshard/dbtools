@@ -15,6 +15,7 @@ def dump_table(reference_db, csv_dir, output_dir):
 
     # Process each CSV file in the given directory
     for csv_file in os.listdir(csv_dir):
+        
         if not csv_file.endswith(".csv"):
             continue  # Skip non-CSV files
         
@@ -72,8 +73,8 @@ def run():
         print("\nUsage: dbtools dump_table <pg_service> <csv_directory> <output_directory>")
         sys.exit(1)
 
-    reference_db = sys.argv[2]
-    csv_dir = sys.argv[3]
-    output_dir = sys.argv[4]
+    reference_db = sys.argv[3]
+    csv_dir = sys.argv[5]
+    output_dir = sys.argv[7]
 
     dump_table(reference_db, csv_dir, output_dir)
