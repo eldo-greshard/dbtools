@@ -1,3 +1,4 @@
+import sys
 import psycopg2
 import csv
 import argparse
@@ -86,14 +87,15 @@ def compare_selected_tables(pg_service, db1, db2, selected_tables):
     
 
 def run():
-    """Entry point for comparing selected tables between two PostgreSQL databases."""
-    parser = argparse.ArgumentParser(description="Compare selected tables between two PostgreSQL databases.")
-    parser.add_argument("--pgservice", required=True, help="PostgreSQL service name")
+    if len(sys.argv) < 3:
+        print("\nUsage: dbtools compare_selected_tables <pg_service>")
+        sys.exit(1)
+        
+    pg_service = sys.argv[3]
     
-    args = parser.parse_args()
 
     # Fetch available databases
-    databases = get_databases(args.pgservice)
+    databases = get_databases(pg_service)
     if len(databases) < 2:
         print("❌ At least two databases are required for comparison.")
         return
@@ -113,7 +115,7 @@ def run():
     
     if selected_tables.lower() == "all":
         from dbtools.commands.compare_selected_table import connect_to_db, get_tables
-        conn = connect_to_db(args.pgservice, db1)
+        conn = connect_to_db(pg_service, db1)
         if conn:
             cur = conn.cursor()
             selected_tables = get_tables(cur)
@@ -127,4 +129,4 @@ def run():
         print("❌ No valid tables selected.")
         return
 
-    compare_selected_tables(args.pgservice, db1, db2, selected_tables)
+    compare_selected_tables(pg_service, db1, db2, selected_tables)

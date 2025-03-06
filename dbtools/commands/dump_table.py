@@ -1,5 +1,6 @@
 import csv
 import os
+import sys
 
 def dump_table(reference_db, csv_file, output_dump_file):
     """Generates a SQL dump script to restore missing data."""
@@ -54,3 +55,13 @@ def dump_table(reference_db, csv_file, output_dump_file):
 
     print(f"\n✅ Dump script generated: {output_dump_file}")
     print(f"🎯 To execute it, run: psql -U your_username -d {reference_db} -f {output_dump_file}")
+
+def run():
+    if len(sys.argv) < 3:
+        print("\nUsage: dbtools compare_selected_tables <pg_service>")
+        sys.exit(1)
+    reference_db = sys.argv[3]
+    csv_file = sys.argv[5]
+    output_dump_file = sys.argv[7]
+
+    dump_table(reference_db, csv_file, output_dump_file)
