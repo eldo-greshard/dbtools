@@ -55,8 +55,8 @@ def run():
         print("\nUsage: dbtools import_missing_data <pg_service> <database> <csv_directory>")
         sys.exit(1)
 
-    pg_service = sys.argv[2]
-    database = sys.argv[3]
-    csv_dir = sys.argv[4]
+    pg_service = sys.argv[3]
+    database = sys.argv[5]
+    csv_dir = sys.argv[7]
 
     bulk_import(pg_service, database, csv_dir)

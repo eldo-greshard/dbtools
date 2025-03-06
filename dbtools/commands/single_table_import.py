@@ -34,6 +34,6 @@ def run():
     database = sys.argv[5]
     csv_file = sys.argv[7]
     temp_table = sys.argv[9]
-    target_table = sys.argv[10]
+    target_table = sys.argv[11]
 
     single_table_import(pg_service, database, csv_file, temp_table, target_table)
