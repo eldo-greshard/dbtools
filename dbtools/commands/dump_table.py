@@ -20,7 +20,7 @@ def dump_table(reference_db, csv_dir, output_dir):
             continue  # Skip non-CSV files
         
         csv_path = os.path.join(csv_dir, csv_file)
-        output_dump_file = os.path.join(output_dir, f"{os.path.splitext(csv_file)[0]}.csv")
+        output_dump_file = os.path.join(output_dir, f"{os.path.splitext(csv_file)[0]}.sql")
 
         print(f"🔄 Processing: {csv_file} → {output_dump_file}")
 

@@ -21,7 +21,7 @@ def bulk_import(pgservice, database, csv_dir):
 
     # Process each CSV file in the given directory
     for csv_file in os.listdir(csv_dir):
-        if not csv_file.endswith(".csv") or not csv_file.endswith(".sql"):
+        if not csv_file.endswith(".csv"):
             continue  # Skip non-CSV files
         
         csv_path = os.path.join(csv_dir, csv_file)

@@ -6,6 +6,7 @@ from dbtools.commands import (
     compare_db,
     compare_selected_table,
     dump_table,
+    execute_dump_script,
     single_table_import
 )
 
@@ -53,7 +54,12 @@ def main():
     parser_single_table_import.add_argument("--temp_table", required=True, help="Temporary table name")
     parser_single_table_import.add_argument("--target_table", required=True, help="Target table name")
     
-    
+    # Command: execute_dump_script
+    parser_execute_dump_script = subparsers.add_parser("execute_dump_script", help="Import single table missing data into a database.")
+    parser_execute_dump_script.add_argument("--pg_service", required=True, help="Postgresql Service Name")
+    parser_execute_dump_script.add_argument("--database", required=True, help="Database to be imported data")
+    parser_execute_dump_script.add_argument("--scripts_directory", required=True, help="The sql scripts directory")
+
     args = parser.parse_args()
 
     if args.command == "auto_export_compare_table":
@@ -68,6 +74,8 @@ def main():
         bulk_import.run()
     elif args.command == "single_table_import":
         single_table_import.run()
+    elif args.command == "execute_dump_script":
+        execute_dump_script.run()
     else:
         parser.print_help()
         sys.exit(1)
