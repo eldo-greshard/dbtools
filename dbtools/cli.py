@@ -7,7 +7,8 @@ from dbtools.commands import (
     compare_selected_table,
     dump_table,
     execute_dump_script,
-    single_table_import
+    single_table_import,
+    single_table_import_wfilter
 )
 
 def main():
@@ -54,6 +55,16 @@ def main():
     parser_single_table_import.add_argument("--temp_table", required=True, help="Temporary table name")
     parser_single_table_import.add_argument("--target_table", required=True, help="Target table name")
     
+    # Command: single_table_import_wfilter
+    parser_single_table_import_wfilter = subparsers.add_parser("single_table_import_wfilter", help="Import single table missing data into a database with filter.")
+    parser_single_table_import_wfilter.add_argument("--pg_service", required=True, help="Postgresql Service Name")
+    parser_single_table_import_wfilter.add_argument("--database", required=True, help="Database to be imported data")
+    parser_single_table_import_wfilter.add_argument("--csv_file", required=True, help="the csv_file contains dump table data")
+    parser_single_table_import_wfilter.add_argument("--temp_table", required=True, help="Temporary table name")
+    parser_single_table_import_wfilter.add_argument("--target_table", required=True, help="Target table name")
+    parser_single_table_import_wfilter.add_argument("--filter_csv", required=True, help="Filter csv data")
+    parser_single_table_import_wfilter.add_argument("--filter_column", required=True, help="Filter column")
+
     # Command: execute_dump_script
     parser_execute_dump_script = subparsers.add_parser("execute_dump_script", help="Import single table missing data into a database.")
     parser_execute_dump_script.add_argument("--pg_service", required=True, help="Postgresql Service Name")
@@ -74,6 +85,8 @@ def main():
         bulk_import.run()
     elif args.command == "single_table_import":
         single_table_import.run()
+    elif args.command == "single_table_import_wfilter":
+        single_table_import_wfilter.run()
     elif args.command == "execute_dump_script":
         execute_dump_script.run()
     else:
