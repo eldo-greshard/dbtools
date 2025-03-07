@@ -51,7 +51,8 @@ COMMANDS = {
     "4": ("Dump Table", dump_table, [
         ("reference_db", "Reference database"),
         ("csv_file", "CSV file"),
-        ("output_dump_file", "Output dump file")
+        ("output_dump_file", "Output dump file"),
+        ("output_data_dir", "Output data directory")
     ]),
     "5": ("Bulk Import", bulk_import, [
         ("pg_service", "PostgreSQL service name"),
@@ -79,6 +80,7 @@ COMMANDS = {
     "8": ("Execute Dump Script", execute_dump_script, [
         ("pg_service", "PostgreSQL service name"),
         ("database", "Target database"),
+        ("scripts_directory", "SQL scripts directory")
         ("scripts_directory", "SQL scripts directory")
     ])
 }

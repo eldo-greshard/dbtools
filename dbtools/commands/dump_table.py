@@ -2,7 +2,7 @@ import csv
 import os
 import sys
 
-def dump_table(reference_db, csv_dir, output_dir):
+def dump_table(reference_db, csv_dir, output_dir, output_data_dir):
     """Generates SQL dump scripts to restore missing data from all CSV files in a directory."""
     
     # Ensure the input CSV directory exists
@@ -12,6 +12,7 @@ def dump_table(reference_db, csv_dir, output_dir):
 
     # Ensure the output directory exists
     os.makedirs(output_dir, exist_ok=True)
+    os.makedirs(output_data_dir, exist_ok=True)
 
     # Process each CSV file in the given directory
     for csv_file in os.listdir(csv_dir):
@@ -60,7 +61,7 @@ def dump_table(reference_db, csv_dir, output_dir):
                 id_list = ", ".join(map(str, ids))
                 dump_file.write(f"-- Dump data for table: {table}\n")
                 dump_file.write(
-                    f"\COPY (SELECT * FROM {table} WHERE id IN ({id_list})) TO 'missing_{table}.csv' CSV HEADER;\n\n"
+                    f"\COPY (SELECT * FROM {table} WHERE id IN ({id_list})) TO '{output_data_dir}/missing_{table}.csv' CSV HEADER;\n\n"
                 )
 
         print(f"✅ Dump script generated: {output_dump_file}")
@@ -68,7 +69,7 @@ def dump_table(reference_db, csv_dir, output_dir):
     print("\n🎯 To execute the dump scripts, run:")
     print(f"psql -U your_username -d {reference_db} -f <path_to_sql_script>")
 
-def run(reference_db, csv_file, output_dump_file):
+def run(reference_db, csv_file, output_dump_file, output_data_dir):
     # if len(sys.argv) < 5:
     #     print("\nUsage: dbtools dump_table <pg_service> <csv_directory> <output_directory>")
     #     sys.exit(1)
@@ -77,4 +78,4 @@ def run(reference_db, csv_file, output_dump_file):
     # csv_dir = sys.argv[5]
     # output_dir = sys.argv[7]
 
-    dump_table(reference_db, csv_file, output_dump_file)
+    dump_table(reference_db, csv_file, output_dump_file, output_data_dir)
