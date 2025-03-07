@@ -10,7 +10,7 @@ def run_psql_command(pgservice, database, command):
     except subprocess.CalledProcessError as e:
         print(f"❌ Error executing command: {command}\n{e.stderr}")
 
-def single_table_import(pgservice, database, csv_file, temp_table, target_table):
+def single_table_import(pgservice, database, csv_file, temp_table, target_table, conflict_column):
     """Imports missing data from CSV into PostgreSQL."""
     
     print("🔹 Creating temporary table...")
@@ -23,9 +23,11 @@ def single_table_import(pgservice, database, csv_file, temp_table, target_table)
     run_psql_command(pgservice, database, f"""
         INSERT INTO {target_table}
         SELECT * FROM {temp_table}
-        ON CONFLICT (path) DO NOTHING;
-        DROP TABLE {temp_table};
+        ON CONFLICT ({conflict_column}) DO NOTHING;
     """)
+
+    print("🔹 Dropping temporary table...")
+    run_psql_command(pgservice, database, f"DROP TABLE {temp_table};")
 
     print("✅ Import process completed successfully!")
 
@@ -35,5 +37,6 @@ def run():
     csv_file = sys.argv[7]
     temp_table = sys.argv[9]
     target_table = sys.argv[11]
+    conflict_column = sys.argv[13]
 
-    single_table_import(pg_service, database, csv_file, temp_table, target_table)
+    single_table_import(pg_service, database, csv_file, temp_table, target_table, conflict_column)

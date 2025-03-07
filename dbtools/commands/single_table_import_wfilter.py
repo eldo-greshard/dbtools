@@ -22,7 +22,7 @@ def get_filter_values(filter_csv, filter_column):
         print(f"❌ Error reading filter file: {e}")
         sys.exit(1)
 
-def single_table_import_wfilter(pgservice, database, csv_file, temp_table, target_table, filter_csv, filter_column):
+def single_table_import_wfilter(pgservice, database, csv_file, temp_table, target_table, filter_csv, filter_column, conflict_column):
     """Imports filtered data from CSV into PostgreSQL."""
     
     print("🔹 Creating temporary table...")
@@ -40,9 +40,11 @@ def single_table_import_wfilter(pgservice, database, csv_file, temp_table, targe
         INSERT INTO {target_table}
         SELECT * FROM {temp_table}
         WHERE {filter_column} IN ({filter_values_str})
-        ON CONFLICT (path) DO NOTHING;
-        DROP TABLE {temp_table};
+        ON CONFLICT ({conflict_column}) DO NOTHING;
     """)
+
+    print("🔹 Dropping temporary table...")
+    run_psql_command(pgservice, database, f"DROP TABLE {temp_table};")
 
     print("✅ Import process completed successfully!")
 
@@ -58,8 +60,9 @@ def run():
     target_table = sys.argv[11]
     filter_csv = sys.argv[13]
     filter_column = sys.argv[15]
+    conflict_column = sys.argv[17]
 
-    single_table_import_wfilter(pg_service, database, csv_file, temp_table, target_table, filter_csv, filter_column)
+    single_table_import_wfilter(pg_service, database, csv_file, temp_table, target_table, filter_csv, filter_column, conflict_column)
 
 if __name__ == "__main__":
     run()
