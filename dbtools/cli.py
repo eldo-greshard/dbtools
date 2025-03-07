@@ -65,7 +65,7 @@ def main():
     parser_single_table_import_wfilter.add_argument("--target_table", required=True, help="Target table name")
     parser_single_table_import_wfilter.add_argument("--filter_csv", required=True, help="Filter csv data")
     parser_single_table_import_wfilter.add_argument("--filter_column", required=True, help="Filter column")
-    parser_single_table_import.add_argument("--conflict_column", required=True, help="Target conflict column")
+    parser_single_table_import_wfilter.add_argument("--conflict_column", required=True, help="Target conflict column")
     
     # Command: execute_dump_script
     parser_execute_dump_script = subparsers.add_parser("execute_dump_script", help="Import single table missing data into a database.")
