@@ -1,5 +1,6 @@
 import subprocess
 import sys
+import pandas as pd
 
 def run_psql_command(pgservice, database, command):
     """Runs a PostgreSQL command using subprocess."""

@@ -6,16 +6,19 @@ setup(
     packages=find_packages(),
     install_requires=[
         "psycopg2",
+        "sentence-transformers",
+        "scipy",
+        "pandas",
     ],
     entry_points={
         "console_scripts": [
             "dbtools=dbtools.cli:main",
         ],
     },
-    author="Your Name",
+    author="Eldo Greshard",
     description="Database comparison and data restoration tools",
     classifiers=[
         "Programming Language :: Python :: 3",
-        "Operating System :: OS Independent",
+        "Operating System :: Linux Server",
     ],
 )

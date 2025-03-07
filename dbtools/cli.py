@@ -1,5 +1,7 @@
 import sys
 import argparse
+from dbtools.const import BANNER, DESCRIPTION
+from dbtools.utils import find_best_command
 from dbtools.commands import (
     auto_export_compare_table,
     bulk_import,
@@ -11,26 +13,6 @@ from dbtools.commands import (
     single_table_import_wfilter
 )
 
-BANNER = """
-╔════════════════════════════════════════════════╗
-║      🛠️  Database Tools CLI - v1.0 🛠️         ║
-║         Efficient PostgreSQL Management        ║
-╚════════════════════════════════════════════════╝
-"""
-
-DESCRIPTION = """
-Welcome to Database Tools CLI!
-This tool helps you manage, compare, and import/export PostgreSQL database data efficiently.
-
-📌 Features:
-✔ Compare entire databases or selected tables
-✔ Export differences as CSV files
-✔ Dump tables and restore missing data
-✔ Execute SQL dump scripts
-✔ Support for PostgreSQL service-based authentication (.pg_service.conf)
-
-👉 Select an option from the menu to proceed.
-"""
 
 COMMANDS = {
     "1": ("Auto Export Compare Table", auto_export_compare_table, [
@@ -102,25 +84,32 @@ def main():
 
     while True:
         display_menu()
-        choice = input("\n🔹 Select an option (1-9): ").strip()
+        user_input = input("\n🔹 Enter a number OR describe your action: ").strip().lower()
 
-        if choice == "9":
+        if user_input == "9":
             print("✅ Exiting... Goodbye!")
             sys.exit(0)
 
-        if choice in COMMANDS:
-            command_name, command_module, params = COMMANDS[choice]
-            print(f"\n🚀 Executing: {command_name}\n")
-            
-            # Collect arguments interactively
-            args = {}
-            for arg, desc in params:
-                args[arg] = get_user_input(desc)
-            
-            # Run the command
-            command_module.run(**args)
+        # If user inputs a number, use the standard COMMANDS dictionary
+        if user_input in COMMANDS:
+            command_key = user_input
         else:
-            print("❌ Invalid option. Please choose a valid number.")
+            # Use AI to determine the best command match
+            command_key = find_best_command(user_input)
+            if not command_key:
+                print("❌ Could not understand your request. Please select a valid option.")
+                continue
+
+        command_name, command_module, params = COMMANDS[command_key]
+        print(f"\n🚀 Executing: {command_name}\n")
+        
+        # Collect arguments interactively
+        args = {}
+        for arg, desc in params:
+            args[arg] = get_user_input(desc)
+        
+        # Run the command
+        command_module.run(**args)
 
 if __name__ == "__main__":
     main()
