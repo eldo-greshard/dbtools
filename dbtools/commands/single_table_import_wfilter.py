@@ -1,5 +1,6 @@
 import subprocess
 import sys
+import pandas as pd
 
 def run_psql_command(pgservice, database, command):
     """Runs a PostgreSQL command using subprocess."""
@@ -47,19 +48,19 @@ def single_table_import_wfilter(pgservice, database, csv_file, temp_table, targe
 
     print("✅ Import process completed successfully!")
 
-def run():
-    if len(sys.argv) < 13:
-        print("❌ Usage: script.py --pgservice <pg_service> --database <database> --csv <csv_file> --temp-table <temp_table> --target-table <target_table> --filter-csv <filter_csv> --filter-column <filter_column>")
-        sys.exit(1)
+def run(pg_service, database, csv_file, temp_table, target_table, filter_csv, filter_column, conflict_column,):
+    # if len(sys.argv) < 13:
+    #     print("❌ Usage: script.py --pgservice <pg_service> --database <database> --csv <csv_file> --temp-table <temp_table> --target-table <target_table> --filter-csv <filter_csv> --filter-column <filter_column>")
+    #     sys.exit(1)
 
-    pg_service = sys.argv[3]
-    database = sys.argv[5]
-    csv_file = sys.argv[7]
-    temp_table = sys.argv[9]
-    target_table = sys.argv[11]
-    filter_csv = sys.argv[13]
-    filter_column = sys.argv[15]
-    conflict_column = sys.argv[17]
+    # pg_service = sys.argv[3]
+    # database = sys.argv[5]
+    # csv_file = sys.argv[7]
+    # temp_table = sys.argv[9]
+    # target_table = sys.argv[11]
+    # filter_csv = sys.argv[13]
+    # filter_column = sys.argv[15]
+    # conflict_column = sys.argv[17]
 
     single_table_import_wfilter(pg_service, database, csv_file, temp_table, target_table, filter_csv, filter_column, conflict_column)
 

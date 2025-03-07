@@ -101,19 +101,19 @@ def compare_all_tables(db1, db2, common_tables, output_dir, pg_service):
     conn2.close()
 
 # Main function
-def run():
-    if len(sys.argv) < 5:
-        print("\nUsage: dbtools auto_export_compare_table <pg_service> <db1> <db2> <output_dir>")
-        sys.exit(1)
+def run(pg_service, db1, db2, output_directory):
+    # if len(sys.argv) < 5:
+    #     print("\nUsage: dbtools auto_export_compare_table <pg_service> <db1> <db2> <output_dir>")
+    #     sys.exit(1)
 
-    pg_service = sys.argv[3]
-    db1 = sys.argv[5]
-    db2 = sys.argv[7]
-    output_dir = sys.argv[9]
+    # pg_service = sys.argv[3]
+    # db1 = sys.argv[5]
+    # db2 = sys.argv[7]
+    # output_dir = sys.argv[9]
 
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-        print(f"📁 Created output directory: {output_dir}")
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
+        print(f"📁 Created output directory: {output_directory}")
 
     databases = get_databases(pg_service)
 
@@ -150,4 +150,4 @@ def run():
 
     print(f"\n📌 {len(common_tables)} common tables detected. Comparing all tables...")
 
-    compare_all_tables(db1, db2, common_tables, output_dir, pg_service)
+    compare_all_tables(db1, db2, common_tables, output_directory, pg_service)

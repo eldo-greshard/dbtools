@@ -31,12 +31,12 @@ def single_table_import(pgservice, database, csv_file, temp_table, target_table,
 
     print("✅ Import process completed successfully!")
 
-def run():
-    pg_service = sys.argv[3]
-    database = sys.argv[5]
-    csv_file = sys.argv[7]
-    temp_table = sys.argv[9]
-    target_table = sys.argv[11]
-    conflict_column = sys.argv[13]
+def run(pg_service, database, csv_file, temp_table, target_table, conflict_column):
+    # pg_service = sys.argv[3]
+    # database = sys.argv[5]
+    # csv_file = sys.argv[7]
+    # temp_table = sys.argv[9]
+    # target_table = sys.argv[11]
+    # conflict_column = sys.argv[13]
 
     single_table_import(pg_service, database, csv_file, temp_table, target_table, conflict_column)

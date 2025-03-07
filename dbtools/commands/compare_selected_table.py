@@ -86,16 +86,16 @@ def compare_selected_tables(pg_service, db1, db2, selected_tables):
     conn2.close()
     
 
-def run():
-    if len(sys.argv) < 3:
-        print("\nUsage: dbtools compare_selected_tables <pg_service>")
-        sys.exit(1)
+def run(pgservice):
+    # if len(sys.argv) < 3:
+    #     print("\nUsage: dbtools compare_selected_tables <pg_service>")
+    #     sys.exit(1)
         
-    pg_service = sys.argv[3]
+    # pg_service = sys.argv[3]
     
 
     # Fetch available databases
-    databases = get_databases(pg_service)
+    databases = get_databases(pgservice)
     if len(databases) < 2:
         print("❌ At least two databases are required for comparison.")
         return
@@ -115,7 +115,7 @@ def run():
     
     if selected_tables.lower() == "all":
         from dbtools.commands.compare_selected_table import connect_to_db, get_tables
-        conn = connect_to_db(pg_service, db1)
+        conn = connect_to_db(pgservice, db1)
         if conn:
             cur = conn.cursor()
             selected_tables = get_tables(cur)
@@ -129,4 +129,4 @@ def run():
         print("❌ No valid tables selected.")
         return
 
-    compare_selected_tables(pg_service, db1, db2, selected_tables)
+    compare_selected_tables(pgservice, db1, db2, selected_tables)

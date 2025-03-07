@@ -50,13 +50,13 @@ def bulk_import(pgservice, database, csv_dir):
 
     print("🎯 All CSV files processed successfully!")
 
-def run():
-    if len(sys.argv) < 4:
-        print("\nUsage: dbtools import_missing_data <pg_service> <database> <csv_directory>")
-        sys.exit(1)
+def run(pg_service, database, csv_dir):
+    # if len(sys.argv) < 4:
+    #     print("\nUsage: dbtools import_missing_data <pg_service> <database> <csv_directory>")
+    #     sys.exit(1)
 
-    pg_service = sys.argv[3]
-    database = sys.argv[5]
-    csv_dir = sys.argv[7]
+    # pg_service = sys.argv[3]
+    # database = sys.argv[5]
+    # csv_dir = sys.argv[7]
 
     bulk_import(pg_service, database, csv_dir)

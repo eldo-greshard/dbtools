@@ -68,13 +68,13 @@ def dump_table(reference_db, csv_dir, output_dir):
     print("\n🎯 To execute the dump scripts, run:")
     print(f"psql -U your_username -d {reference_db} -f <path_to_sql_script>")
 
-def run():
-    if len(sys.argv) < 5:
-        print("\nUsage: dbtools dump_table <pg_service> <csv_directory> <output_directory>")
-        sys.exit(1)
+def run(reference_db, csv_file, output_dump_file):
+    # if len(sys.argv) < 5:
+    #     print("\nUsage: dbtools dump_table <pg_service> <csv_directory> <output_directory>")
+    #     sys.exit(1)
 
-    reference_db = sys.argv[3]
-    csv_dir = sys.argv[5]
-    output_dir = sys.argv[7]
+    # reference_db = sys.argv[3]
+    # csv_dir = sys.argv[5]
+    # output_dir = sys.argv[7]
 
-    dump_table(reference_db, csv_dir, output_dir)
+    dump_table(reference_db, csv_file, output_dump_file)

@@ -101,15 +101,15 @@ def compare_tables(db1, db2, output_file, pg_service):
     conn2.close()
 
 # Entry point for CLI integration
-def run():
-    if len(sys.argv) < 5:
-        print("\nUsage: dbtools compare_db <pg_service> <db1> <db2> <output_file>")
-        sys.exit(1)
+def run(pg_service, db1, db2, csvoutput, ):
+    # if len(sys.argv) < 5:
+    #     print("\nUsage: dbtools compare_db <pg_service> <db1> <db2> <output_file>")
+    #     sys.exit(1)
 
-    pg_service = sys.argv[2]
-    db1 = sys.argv[3]
-    db2 = sys.argv[4]
-    output_file = sys.argv[5]
+    # pg_service = sys.argv[2]
+    # db1 = sys.argv[3]
+    # db2 = sys.argv[4]
+    # output_file = sys.argv[5]
 
     databases = get_databases(pg_service)
 
@@ -118,4 +118,4 @@ def run():
     elif db1 == db2:
         print("❌ Cannot compare a database with itself.")
     else:
-        compare_tables(db1, db2, output_file, pg_service)
+        compare_tables(db1, db2, csvoutput, pg_service)
