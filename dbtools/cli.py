@@ -1,5 +1,5 @@
-import argparse
 import sys
+import argparse
 from dbtools.commands import (
     auto_export_compare_table,
     bulk_import,
@@ -11,89 +11,116 @@ from dbtools.commands import (
     single_table_import_wfilter
 )
 
+BANNER = """
+╔════════════════════════════════════════════════╗
+║      🛠️  Database Tools CLI - v1.0 🛠️         ║
+║         Efficient PostgreSQL Management        ║
+╚════════════════════════════════════════════════╝
+"""
+
+DESCRIPTION = """
+Welcome to Database Tools CLI!
+This tool helps you manage, compare, and import/export PostgreSQL database data efficiently.
+
+📌 Features:
+✔ Compare entire databases or selected tables
+✔ Export differences as CSV files
+✔ Dump tables and restore missing data
+✔ Execute SQL dump scripts
+✔ Support for PostgreSQL service-based authentication (.pg_service.conf)
+
+👉 Select an option from the menu to proceed.
+"""
+
+COMMANDS = {
+    "1": ("Auto Export Compare Table", auto_export_compare_table, [
+        ("pg_service", "PostgreSQL service name"),
+        ("db1", "First database name"),
+        ("db2", "Second database name"),
+        ("output_directory", "Output directory")
+    ]),
+    "2": ("Compare Databases", compare_db, [
+        ("pg_service", "PostgreSQL service name"),
+        ("db1", "First database name"),
+        ("db2", "Second database name"),
+        ("csvoutput", "Output CSV file path")
+    ]),
+    "3": ("Compare Selected Table", compare_selected_table, [
+        ("pgservice", "PostgreSQL service name")
+    ]),
+    "4": ("Dump Table", dump_table, [
+        ("reference_db", "Reference database"),
+        ("csv_file", "CSV file"),
+        ("output_dump_file", "Output dump file")
+    ]),
+    "5": ("Bulk Import", bulk_import, [
+        ("pg_service", "PostgreSQL service name"),
+        ("database", "Target database"),
+        ("csv_dir", "Directory containing CSV files")
+    ]),
+    "6": ("Single Table Import", single_table_import, [
+        ("pg_service", "PostgreSQL service name"),
+        ("database", "Target database"),
+        ("csv_file", "CSV file"),
+        ("temp_table", "Temporary table name"),
+        ("target_table", "Target table name"),
+        ("conflict_column", "Conflict column")
+    ]),
+    "7": ("Single Table Import with Filter", single_table_import_wfilter, [
+        ("pg_service", "PostgreSQL service name"),
+        ("database", "Target database"),
+        ("csv_file", "CSV file"),
+        ("temp_table", "Temporary table name"),
+        ("target_table", "Target table name"),
+        ("filter_csv", "Filter CSV file"),
+        ("filter_column", "Filter column"),
+        ("conflict_column", "Conflict column")
+    ]),
+    "8": ("Execute Dump Script", execute_dump_script, [
+        ("pg_service", "PostgreSQL service name"),
+        ("database", "Target database"),
+        ("scripts_directory", "SQL scripts directory")
+    ])
+}
+
+def get_user_input(prompt):
+    """ Helper function to get user input with a prompt """
+    return input(f"{prompt}: ").strip()
+
+def display_menu():
+    """ Display the command menu """
+    print("\n" + "="*50)
+    print("📌 Available Commands:")
+    for key, (description, _, _) in COMMANDS.items():
+        print(f"  {key}. {description}")
+    print("  9. ❌ Exit")
+    print("="*50)
+
 def main():
-    parser = argparse.ArgumentParser(prog="dbtools", description="Database Tools CLI")
+    print(BANNER)
+    print(DESCRIPTION)
 
-    subparsers = parser.add_subparsers(dest="command", help="Available commands",required=True)
+    while True:
+        display_menu()
+        choice = input("\n🔹 Select an option (1-9): ").strip()
 
-    # Command: auto_export_compare_table
-    parser_auto_export_compare_table = subparsers.add_parser("auto_export_compare_table", help="Automatically compare all tables and export results.")
-    parser_auto_export_compare_table.add_argument("--pg_service", required=True, help="PostgreSQL service name")
-    parser_auto_export_compare_table.add_argument("--db1", required=True, help="First database name")
-    parser_auto_export_compare_table.add_argument("--db2", required=True, help="Second database name")
-    parser_auto_export_compare_table.add_argument("--output_directory", required=True, help="Output directory")
+        if choice == "9":
+            print("✅ Exiting... Goodbye!")
+            sys.exit(0)
 
-    # Command: compare_db
-    parser_compare_db  = subparsers.add_parser("compare_db", help="Compare entire databases.")
-    parser_compare_db.add_argument("--pg_service", required=True, help="PostgreSQL service name")
-    parser_compare_db.add_argument("--db1", required=True, help="First database name")
-    parser_compare_db.add_argument("--db2", required=True, help="Second database name")
-    parser_compare_db.add_argument("--csvoutput", required=True, help="Output File extension *.csv")
-
-    # Command: compare_selected_table
-    parser_compare_selected_table = subparsers.add_parser("compare_selected_table", help="Compare specific tables between two databases.")
-    """Entry point for comparing selected tables between two PostgreSQL databases."""
-    parser_compare_selected_table.add_argument("--pgservice", required=True, help="PostgreSQL service name")
-    
-    # Command: dump_table
-    parser_dump_table = subparsers.add_parser("dump_table", help="Dump specific tables from a database.")
-    parser_dump_table.add_argument("--reference_db", required=True, help="Reference database")
-    parser_dump_table.add_argument("--csv_file", required=True, help="CSV File")
-    parser_dump_table.add_argument("--output_dump_file", required=True, help="Output Dump File")
-
-    # Command: bulk_import
-    parser_bulk_import = subparsers.add_parser("bulk_import", help="Bulk import missing data into a database.")
-    parser_bulk_import.add_argument("--pg_service", required=True, help="Postgresql Service Name")
-    parser_bulk_import.add_argument("--database", required=True, help="Database to be imported data")
-    parser_bulk_import.add_argument("--csv_dir", required=True, help="the directory csv_file contains dump table data")
-    
-    # Command: single_table_import
-    parser_single_table_import = subparsers.add_parser("single_table_import", help="Import single table missing data into a database.")
-    parser_single_table_import.add_argument("--pg_service", required=True, help="Postgresql Service Name")
-    parser_single_table_import.add_argument("--database", required=True, help="Database to be imported data")
-    parser_single_table_import.add_argument("--csv_file", required=True, help="the csv_file contains dump table data")
-    parser_single_table_import.add_argument("--temp_table", required=True, help="Temporary table name")
-    parser_single_table_import.add_argument("--target_table", required=True, help="Target table name")
-    parser_single_table_import.add_argument("--conflict_column", required=True, help="Target conflict column")
-    
-    # Command: single_table_import_wfilter
-    parser_single_table_import_wfilter = subparsers.add_parser("single_table_import_wfilter", help="Import single table missing data into a database with filter.")
-    parser_single_table_import_wfilter.add_argument("--pg_service", required=True, help="Postgresql Service Name")
-    parser_single_table_import_wfilter.add_argument("--database", required=True, help="Database to be imported data")
-    parser_single_table_import_wfilter.add_argument("--csv_file", required=True, help="the csv_file contains dump table data")
-    parser_single_table_import_wfilter.add_argument("--temp_table", required=True, help="Temporary table name")
-    parser_single_table_import_wfilter.add_argument("--target_table", required=True, help="Target table name")
-    parser_single_table_import_wfilter.add_argument("--filter_csv", required=True, help="Filter csv data")
-    parser_single_table_import_wfilter.add_argument("--filter_column", required=True, help="Filter column")
-    parser_single_table_import_wfilter.add_argument("--conflict_column", required=True, help="Target conflict column")
-    
-    # Command: execute_dump_script
-    parser_execute_dump_script = subparsers.add_parser("execute_dump_script", help="Import single table missing data into a database.")
-    parser_execute_dump_script.add_argument("--pg_service", required=True, help="Postgresql Service Name")
-    parser_execute_dump_script.add_argument("--database", required=True, help="Database to be imported data")
-    parser_execute_dump_script.add_argument("--scripts_directory", required=True, help="The sql scripts directory")
-
-    args = parser.parse_args()
-
-    if args.command == "auto_export_compare_table":
-        auto_export_compare_table.run()
-    elif args.command == "compare_db":
-        compare_db.run()
-    elif args.command == "compare_selected_table":
-        compare_selected_table.run()
-    elif args.command == "dump_table":
-        dump_table.run()
-    elif args.command == "bulk_import":
-        bulk_import.run()
-    elif args.command == "single_table_import":
-        single_table_import.run()
-    elif args.command == "single_table_import_wfilter":
-        single_table_import_wfilter.run()
-    elif args.command == "execute_dump_script":
-        execute_dump_script.run()
-    else:
-        parser.print_help()
-        sys.exit(1)
+        if choice in COMMANDS:
+            command_name, command_module, params = COMMANDS[choice]
+            print(f"\n🚀 Executing: {command_name}\n")
+            
+            # Collect arguments interactively
+            args = {}
+            for arg, desc in params:
+                args[arg] = get_user_input(desc)
+            
+            # Run the command
+            command_module.run(**args)
+        else:
+            print("❌ Invalid option. Please choose a valid number.")
 
 if __name__ == "__main__":
     main()
