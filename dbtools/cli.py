@@ -81,7 +81,6 @@ COMMANDS = {
         ("pg_service", "PostgreSQL service name"),
         ("database", "Target database"),
         ("scripts_directory", "SQL scripts directory")
-        ("scripts_directory", "SQL scripts directory")
     ])
 }
 
