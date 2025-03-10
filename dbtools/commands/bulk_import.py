@@ -42,7 +42,7 @@ def bulk_import(pgservice, database, csv_dir):
         run_psql_command(pgservice, database, f"""
             INSERT INTO {target_table}
             SELECT * FROM {temp_table}
-            ON CONFLICT (path) DO NOTHING;
+            ON CONFLICT (id) DO NOTHING;
             DROP TABLE {temp_table};
         """)
 
