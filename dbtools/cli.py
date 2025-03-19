@@ -8,6 +8,7 @@ from dbtools.commands import (
     dump_table,
     execute_dump_script,
     single_table_import,
+    single_table_import_wexclude_filter,
     single_table_import_wfilter
 )
 
@@ -77,7 +78,17 @@ COMMANDS = {
         ("filter_column", "Filter column"),
         ("conflict_column", "Conflict column")
     ]),
-    "8": ("Execute Dump Script", execute_dump_script, [
+    "8": ("Single Table Import with Excluding Data", single_table_import_wexclude_filter, [
+        ("pg_service", "PostgreSQL service name"),
+        ("database", "Target database"),
+        ("csv_file", "CSV file"),
+        ("temp_table", "Temporary table name"),
+        ("target_table", "Target table name"),
+        ("filter_csv", "Filter CSV file"),
+        ("filter_column", "Filter column"),
+        ("conflict_column", "Conflict column")
+    ]),
+    "9": ("Execute Dump Script", execute_dump_script, [
         ("pg_service", "PostgreSQL service name"),
         ("database", "Target database"),
         ("scripts_directory", "SQL scripts directory")
