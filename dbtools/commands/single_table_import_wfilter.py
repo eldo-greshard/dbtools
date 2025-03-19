@@ -26,9 +26,17 @@ def single_table_import_wfilter(pgservice, database, csv_file, temp_table, targe
     """Imports filtered data from CSV into PostgreSQL."""
     
     print("🔹 Creating temporary table...")
+    print(f""" Execute : 
+        CREATE TABLE {temp_table} AS TABLE {target_table} WITH NO DATA;
+    """)
+    print("-----------------------------------")
     run_psql_command(pgservice, database, f"CREATE TABLE {temp_table} AS TABLE {target_table} WITH NO DATA;")
 
     print(f"🔹 Importing data from {csv_file}...")
+    print(f""" Execute : 
+        \\COPY {temp_table} FROM '{csv_file}' CSV HEADER;
+    """)
+    print("-----------------------------------")
     run_psql_command(pgservice, database, f"\\COPY {temp_table} FROM '{csv_file}' CSV HEADER;")
 
     print("🔹 Extracting filter values...")
