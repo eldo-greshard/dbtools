@@ -1,15 +1,9 @@
-import subprocess
+
 import sys
 import pandas as pd
 
-def run_psql_command(pgservice, database, command):
-    """Runs a PostgreSQL command using subprocess."""
-    full_command = f'PGSERVICE={pgservice} psql -d {database} -c "{command}"'
-    try:
-        result = subprocess.run(full_command, shell=True, check=True, text=True, capture_output=True)
-        print(result.stdout)
-    except subprocess.CalledProcessError as e:
-        print(f"❌ Error executing command: {command}\n{e.stderr}")
+from dbtools.utils.utility import get_columns, run_psql_command
+
 
 def get_filter_values(filter_csv, filter_column):
     """Reads the filter CSV file and extracts unique values from the specified filter column."""
@@ -22,6 +16,7 @@ def get_filter_values(filter_csv, filter_column):
         print(f"❌ Error reading filter file: {e}")
         sys.exit(1)
 
+
 def single_table_import_wfilter(pgservice, database, csv_file, temp_table, target_table, filter_csv, filter_column, conflict_column):
     """Imports filtered data from CSV into PostgreSQL."""
     
@@ -31,6 +26,15 @@ def single_table_import_wfilter(pgservice, database, csv_file, temp_table, targe
     """)
     print("-----------------------------------")
     run_psql_command(pgservice, database, f"CREATE TABLE {temp_table} AS TABLE {target_table} WITH NO DATA;")
+
+    # Step 2: Modify columns that might have missing values (set them to NULL if not already)
+    print(f"🔹 Modifying columns in temporary table to allow NULL for missing values...")
+    target_columns = get_columns(pgservice, database, target_table)
+    
+    # Alter columns in the temporary table to accept NULL as default if missing in CSV
+    for column in target_columns:
+        run_psql_command(pgservice, database, f"ALTER TABLE {temp_table} ALTER COLUMN {column} SET DEFAULT NULL;")
+
 
     print(f"🔹 Importing data from {csv_file}...")
     print(f""" Execute : 

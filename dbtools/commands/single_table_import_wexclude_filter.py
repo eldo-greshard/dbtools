@@ -2,14 +2,16 @@ import subprocess
 import sys
 import pandas as pd
 
-def run_psql_command(pgservice, database, command):
-    """Runs a PostgreSQL command using subprocess."""
-    full_command = f'PGSERVICE={pgservice} psql -d {database} -c "{command}"'
-    try:
-        result = subprocess.run(full_command, shell=True, check=True, text=True, capture_output=True)
-        print(result.stdout)
-    except subprocess.CalledProcessError as e:
-        print(f"❌ Error executing command: {command}\n{e.stderr}")
+from dbtools.utils.utility import run_psql_command
+
+# def run_psql_command(pgservice, database, command):
+#     """Runs a PostgreSQL command using subprocess."""
+#     full_command = f'PGSERVICE={pgservice} psql -d {database} -c "{command}"'
+#     try:
+#         result = subprocess.run(full_command, shell=True, check=True, text=True, capture_output=True)
+#         print(result.stdout)
+#     except subprocess.CalledProcessError as e:
+#         print(f"❌ Error executing command: {command}\n{e.stderr}")
 
 def get_filter_values(filter_csv, filter_column):
     """Reads the filter CSV file and extracts unique values from the specified filter column."""
