@@ -1,8 +1,9 @@
 
+import csv
 import sys
 import pandas as pd
 
-from dbtools.utils.utility import get_columns, run_psql_command
+from dbtools.utils.utility import alter_table_for_missing_columns, get_columns, get_missing_columns, run_psql_command
 
 
 def get_filter_values(filter_csv, filter_column):
@@ -27,21 +28,28 @@ def single_table_import_wfilter(pgservice, database, csv_file, temp_table, targe
     print("-----------------------------------")
     run_psql_command(pgservice, database, f"CREATE TABLE {temp_table} AS TABLE {target_table} WITH NO DATA;")
 
-    # Step 2: Modify columns that might have missing values (set them to NULL if not already)
-    print(f"🔹 Modifying columns in temporary table to allow NULL for missing values...")
-    target_columns = get_columns(pgservice, database, target_table)
+    with open(csv_file, 'r') as file:
+        csv_reader = csv.reader(file)
+        csv_header = next(csv_reader)  # Get the first row (header) of the CSV
     
-    # Alter columns in the temporary table to accept NULL as default if missing in CSV
-    for column in target_columns:
-        run_psql_command(pgservice, database, f"ALTER TABLE {temp_table} ALTER COLUMN {column} SET DEFAULT NULL;")
+    # Ensure that the CSV header contains only columns that exist in the target table
+    # Filter out any CSV columns that do not exist in the target table
+    valid_columns = [col for col in csv_header]
+    
+    # If there are no valid columns to copy, print an error and return
+    if not valid_columns:
+        print("❌ No matching columns between the CSV and the target table.")
+        return
 
+    # Construct the COPY command dynamically using valid columns
+    columns_str = ", ".join(valid_columns)
 
     print(f"🔹 Importing data from {csv_file}...")
     print(f""" Execute : 
         \\COPY {temp_table} FROM '{csv_file}' CSV HEADER;
     """)
     print("-----------------------------------")
-    run_psql_command(pgservice, database, f"\\COPY {temp_table} FROM '{csv_file}' CSV HEADER;")
+    run_psql_command(pgservice, database, f"\\COPY {temp_table} ({columns_str}) FROM '{csv_file}' CSV HEADER;")
 
     print("🔹 Extracting filter values...")
     filter_values = get_filter_values(filter_csv, filter_column)

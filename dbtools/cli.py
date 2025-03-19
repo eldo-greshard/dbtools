@@ -105,7 +105,7 @@ def display_menu():
     print("📌 Available Commands:")
     for key, (description, _, _) in COMMANDS.items():
         print(f"  {key}. {description}")
-    print("  9. ❌ Exit")
+    print("  0. ❌ Exit")
     print("="*50)
 
 def main():
@@ -116,7 +116,7 @@ def main():
         display_menu()
         choice = input("\n🔹 Select an option (1-9): ").strip()
 
-        if choice == "9":
+        if choice == "0":
             print("✅ Exiting... Goodbye!")
             sys.exit(0)
 
